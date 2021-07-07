@@ -1,0 +1,40 @@
+version: "3"
+
+services: 
+    db:
+        image: mysql:5.7
+        restart: always
+        environment: 
+            MYSQL_DATABASE: 'demo_db'
+            MYSQL_PASSWORD: '0ibmys'
+            MYSQL_ROOT_PASSWORD: '0ibmys' 
+        ports: 
+            - '3307:3306'
+        expose: 
+            - '3307'
+        volumes: 
+            - my-demo_db:/var/lib/mysql
+    api :
+        build: 
+            context: .
+            dockerfile: DockerFile
+        hostname: api
+        env_file: .env
+        ports: 
+            - "8080:8080"
+        depends_on: 
+            - db    
+    elasticsearch:
+        image: 'docker.elastic.co/elasticsearch/elasticsearch:7.10.2'
+        environment: 
+            - discovery.type=single-node
+            - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+        ports: 
+            - "9200:9200"
+        volumes: 
+            - esdata:/usr/share/elasticsearch/data
+volumes: 
+    my-demo_db:
+    esdata:
+        driver: local
+
