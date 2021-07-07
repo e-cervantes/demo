@@ -1,0 +1,1 @@
+this is a sample demo of GO lang integration with MySQL and ELK Stack
